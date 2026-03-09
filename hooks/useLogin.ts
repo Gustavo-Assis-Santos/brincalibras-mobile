@@ -30,17 +30,31 @@ export const useLogin = () => {
         }).start();
     };
 
+    const resetarErro = () => {
+        Animated.timing(errorAnim, { 
+            toValue: 0, 
+            duration: 200, 
+            useNativeDriver: false 
+        }).start();
+    };
+
     const validarESubmeter = () => {
         //Em algum momento a api do back-end tem que entrar aqui, por enquanto ele só faz a
         //validação dos campos vazios
         let temErro = false;
         const novoErro = { email: false, senha: false };
 
-        if (!email) { novoErro.email = true; temErro = true; }
-        if (!senha) { novoErro.senha = true; temErro = true; }
+        if (!email || email === "") { novoErro.email = true; temErro = true; }
+        if (!senha || email === "") { novoErro.senha = true; temErro = true; }
 
-        setErro(novoErro);
-        dispararErro();
+        setErro(novoErro); //Registra se houve erro ou não
+
+        if (temErro) {
+            dispararErro();
+        } else {
+            resetarErro(); //Desfaz o background vermelho
+        }
+
         return;
     };
 
