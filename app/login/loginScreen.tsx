@@ -10,7 +10,8 @@ export default function LoginScreen() {
     senha, setSenha, 
     erro, validarESubmeter,
     focusAnimEmail, animateFocus,
-    focusAnimSenha 
+    focusAnimSenha,
+    errorAnim
   } = useLogin();
 
   const placeholderOpacityEmail = focusAnimEmail.interpolate({
@@ -32,6 +33,14 @@ export default function LoginScreen() {
     inputRange: [0, 1],
     outputRange: ['#eeeeee', '#d1d1d1']
   });
+
+  const backgroundColorErro = errorAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['#eeeeee', '#fcc5c5']
+  });
+
+  const finalBgEmail = erro.email ? backgroundColorErro : backgroundColorEmail;
+  const finalBgSenha = erro.senha ? backgroundColorErro : backgroundColorSenha;
 
   return (
     <View style={styles.container}>
@@ -57,7 +66,7 @@ export default function LoginScreen() {
       {/* Formulário */}
       <View style={styles.inputSection}>
         <Text style={styles.label}>E-mail</Text>
-        <Animated.View style={[styles.inputContainer, {backgroundColor: backgroundColorEmail}]}>
+        <Animated.View style={[styles.inputContainer, {backgroundColor: finalBgEmail}]}>
           <Ionicons name="mail-outline" size={20} color="#000000" style={styles.inputIcon} />
           <Animated.Text
             style={[
@@ -68,7 +77,7 @@ export default function LoginScreen() {
             email@email.com
           </Animated.Text>
           <TextInput 
-            style={[styles.input, erro.senha && styles.inputError]} 
+            style={styles.input} 
             onFocus={() => animateFocus(focusAnimEmail, 1)}
             onBlur={(e) => {
               if (email === "") animateFocus(focusAnimEmail, 0)
@@ -79,7 +88,7 @@ export default function LoginScreen() {
         </Animated.View>
 
         <Text style={styles.label}>Senha</Text>
-        <Animated.View style={[styles.inputContainer, {backgroundColor: backgroundColorSenha}]}>
+        <Animated.View style={[styles.inputContainer, {backgroundColor: finalBgSenha}]}>
           <Ionicons name="lock-closed-outline" size={20} color="#000000" style={styles.inputIcon} />
           <Animated.Text
             style={[
@@ -90,7 +99,7 @@ export default function LoginScreen() {
             ***************
           </Animated.Text>
           <TextInput 
-            style={[styles.input, erro.senha && styles.inputError]} 
+            style={styles.input} 
             onFocus={() => animateFocus(focusAnimSenha, 1)}
             onBlur={(e) => {
               if (senha === "") animateFocus(focusAnimSenha, 0)
