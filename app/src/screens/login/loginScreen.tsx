@@ -1,15 +1,15 @@
 import { FontAwesome, Ionicons } from '@expo/vector-icons'; // Para os ícones
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Text, TouchableOpacity, View } from 'react-native';
 
 import { useLogin } from '../../../../hooks/useLogin';
 import { InputAnimado } from '../../components/inputAnimado';
 import { styles } from './login.styles';
 
 export default function LoginScreen() {
-  const { 
-      email, setEmail, senha, setSenha, erro, validarESubmeter,
-      focusAnimEmail, focusAnimSenha, errorAnim, animateFocus
-    } = useLogin();
+  const {
+    email, setEmail, senha, setSenha, erro, errorMessage, validarESubmeter,
+    focusAnimEmail, focusAnimSenha, errorAnim, animateFocus
+  } = useLogin();
 
   return (
     <View style={styles.container}>
@@ -33,7 +33,15 @@ export default function LoginScreen() {
       </View>
 
       <View style={styles.inputSection}>
-        <InputAnimado 
+        {errorMessage ? (
+          <Animated.View style={[styles.errorBox, { opacity: errorAnim }]}> 
+            {errorMessage.split(/\s*\.\s*/).filter(Boolean).map((msg, idx) => (
+              <Text style={styles.errorText} key={idx}>{msg.trim()}</Text>
+            ))}
+          </Animated.View>
+        ) : null}
+
+        <InputAnimado
           label="E-mail"
           placeholder="email@email.com"
           value={email}
@@ -45,7 +53,7 @@ export default function LoginScreen() {
           animateFocus={animateFocus}
         />
 
-        <InputAnimado 
+        <InputAnimado
           label="Senha"
           placeholder="***************"
           value={senha}
