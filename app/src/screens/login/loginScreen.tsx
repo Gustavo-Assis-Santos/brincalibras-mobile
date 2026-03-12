@@ -1,4 +1,5 @@
 import { FontAwesome, Ionicons } from '@expo/vector-icons'; // Para os ícones
+import { Link } from 'expo-router';
 import { Animated, Text, TouchableOpacity, View } from 'react-native';
 
 import { useLogin } from '../../../../hooks/useLogin';
@@ -72,7 +73,10 @@ export default function LoginScreen() {
       </View>
 
       <Text style={styles.footerText}>
-        Não tem uma conta? <Text style={styles.link}>Cadastre-se</Text>
+        Não tem uma conta?{' '}
+        <Link href="/cadastro" asChild>
+          <Text style={styles.link}>Cadastre-se</Text>
+        </Link>
       </Text>
       <Text style={styles.footerText}>
         Esqueceu a senha? <Text style={styles.link}>Recupere aqui</Text>
