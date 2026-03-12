@@ -9,7 +9,8 @@ export default function CadastroScreen() {
     const { 
         nome, setNome, email, setEmail, senha, setSenha, confirmaSenha, setConfirmaSenha,
         erro, validarECadastrar, animateFocus,
-        focusAnimNome, focusAnimEmail, focusAnimSenha, focusAnimConfirma, errorAnim
+        focusAnimNome, focusAnimEmail, focusAnimSenha, focusAnimConfirma, errorAnim,
+        mensagens
     } = useCadastro();
 
     return (
@@ -31,13 +32,79 @@ export default function CadastroScreen() {
 
             {/* Novos campos conforme a print */}
             <View style={styles.inputSection}>
-                <InputAnimado label="Nome" placeholder="Seu nome aqui" value={nome} onChangeText={setNome} iconName="person-outline" focusAnim={focusAnimNome} errorAnim={errorAnim} temErro={erro.nome} animateFocus={animateFocus} />
-                
-                <InputAnimado label="E-mail" placeholder="email@email.com" value={email} onChangeText={setEmail} iconName="mail-outline" focusAnim={focusAnimEmail} errorAnim={errorAnim} temErro={erro.email} animateFocus={animateFocus} />
+                <InputAnimado 
+                    label={
+                        <View style={styles.labelErro}>
+                            <Text style={styles.label}>Nome</Text>
+                            {erro.nome && (
+                                <Text style={styles.msgErro}> {mensagens.nome}</Text>
+                            )}
+                        </View>
+                    }
+                    placeholder="Seu nome aqui" 
+                    value={nome} onChangeText={setNome} 
+                    iconName="person-outline" focusAnim={focusAnimNome} 
+                    errorAnim={errorAnim} temErro={erro.nome} 
+                    animateFocus={animateFocus} 
+                />
+                <InputAnimado
+                    label={
+                        <View style={styles.labelErro}>
+                            <Text style={styles.label}>E-mail</Text>
+                            {erro.email && (
+                                <Text style={styles.msgErro}> {mensagens.email}</Text>
+                            )}
+                        </View>
+                    }
+                    placeholder="email@email.com"
+                    value={email}
+                    onChangeText={setEmail}
+                    iconName="mail-outline"
+                    focusAnim={focusAnimEmail}
+                    errorAnim={errorAnim}
+                    temErro={erro.email}
+                    animateFocus={animateFocus}
+                />
 
-                <InputAnimado label="Senha" placeholder="****************" value={senha} onChangeText={setSenha} iconName="lock-closed-outline" focusAnim={focusAnimSenha} errorAnim={errorAnim} temErro={erro.senha} secureTextEntry animateFocus={animateFocus} />
+                <InputAnimado 
+                    label={
+                        <View style={styles.labelErro}>
+                            <Text style={styles.label}>Senha</Text>
+                            {erro.senha && (
+                                <Text style={styles.msgErro}> {mensagens.senha}</Text>
+                            )}
+                        </View>
+                    }
+                    placeholder="****************" 
+                    value={senha} 
+                    onChangeText={setSenha} 
+                    iconName="lock-closed-outline" 
+                    focusAnim={focusAnimSenha} 
+                    errorAnim={errorAnim} 
+                    temErro={erro.senha} 
+                    secureTextEntry 
+                    animateFocus={animateFocus} 
+                />
 
-                <InputAnimado label="Confirmar senha" placeholder="****************" value={confirmaSenha} onChangeText={setConfirmaSenha} iconName="lock-closed-outline" focusAnim={focusAnimConfirma} errorAnim={errorAnim} temErro={erro.confirmaSenha} secureTextEntry animateFocus={animateFocus} />
+                <InputAnimado 
+                    label={
+                        <View style={styles.labelErro}>
+                            <Text style={styles.label}>Confirmar senha</Text>
+                            {erro.senha && (
+                                <Text style={styles.msgErro}> {mensagens.senha}</Text>
+                            )}
+                        </View>
+                    }
+                    placeholder="****************" 
+                    value={confirmaSenha} 
+                    onChangeText={setConfirmaSenha} 
+                    iconName="lock-closed-outline" 
+                    focusAnim={focusAnimConfirma} 
+                    errorAnim={errorAnim} 
+                    temErro={erro.confirmaSenha} 
+                    secureTextEntry 
+                    animateFocus={animateFocus} 
+                />
 
                 <TouchableOpacity style={styles.button} onPress={validarECadastrar}>
                     <Text style={styles.buttonText}>Cadastrar</Text>

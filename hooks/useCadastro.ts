@@ -6,6 +6,7 @@ export const useCadastro = () => {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [confirmaSenha, setConfirmaSenha] = useState('');
+    const [mensagens, setMensagens] = useState<any>({});
 
     const [erro, setErro] = useState({ nome: false, email: false, senha: false, confirmaSenha: false });
 
@@ -20,26 +21,58 @@ export const useCadastro = () => {
         Animated.timing(value, { toValue, duration: 200, useNativeDriver: false }).start();
     };
 
-    const validarECadastrar = () => {
-        const novoErro = {
-            nome: !nome,
-            email: !email,
-            senha: !senha,
-            confirmaSenha: !confirmaSenha || confirmaSenha !== senha
-        };
+    const dispararErro = () => {
+        Animated.sequence([
+            Animated.timing(errorAnim, { toValue: 1, duration: 200, useNativeDriver: false })
+        ]).start();
+    };
 
-        setErro(novoErro);
+    const resetarErro = () => {
+        Animated.timing(errorAnim, { toValue: 0, duration: 200, useNativeDriver: false }).start();
 
-        if (Object.values(novoErro).some(e => e)) {
-            Animated.timing(errorAnim, { toValue: 1, duration: 200, useNativeDriver: false }).start();
-        } else {
-            console.log("Enviando novo usuário para o Spring Boot...");
+        const resetarErros = {
+            nome: false,
+            email: false,
+            senha: false,
+            confirmaSenha: false
+        }
+
+        setErro(resetarErros)
+    };
+
+    const validarECadastrar = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nome, email, senha })
+            });
+
+            if (response.status === 400 || response.status === 409) {
+                const data = await response.json();
+                
+                const novosErros = {
+                    nome: !!data.fields?.nome,
+                    email: response.status === 409 ? true : !!data.fields?.email,
+                    senha: !!data.fields?.senha,
+                    confirmaSenha: false 
+                };
+
+                setErro(novosErros);
+                setMensagens(data.fields || { email: data.message });
+                dispararErro();
+            } else if (response.ok) {
+                resetarErro();
+            }
+        } catch (e) {
+            console.error("Erro na conexão");
         }
     };
 
     return {
         nome, setNome, email, setEmail, senha, setSenha, confirmaSenha, setConfirmaSenha,
         erro, validarECadastrar, animateFocus,
-        focusAnimNome, focusAnimEmail, focusAnimSenha, focusAnimConfirma, errorAnim
+        focusAnimNome, focusAnimEmail, focusAnimSenha, focusAnimConfirma, errorAnim,
+        mensagens
     };
 };
